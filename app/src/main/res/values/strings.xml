@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">FederatedBirds</string>
     <string name="hello" />
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Connection</string>
+    <string name="invalid_format">Incorrect format</string>
+    <string name="login_failed">Connection failed</string>
+    <string name="home">Home</string>
+    <string name="settings">Settings</string>
 </resources>

@@ -19,11 +19,14 @@ import fb.sio.ecp.fr.federatedbirds.model.Message;
 public class MessagesLoader extends AsyncTaskLoader<List<Message>>{
 
     private List<Message> mResult;
+    private Long mUserId;
 
-    public MessagesLoader(Context context){
+    public MessagesLoader(Context context, Long UserId){
         super(context);
+        mUserId = UserId;
     }
 
+    // Obligé d'appeler forceLoad au démarrage du loader pour que le load fonctionne. Mal fait mais c'est comme ça.
     @Override
     protected void onStartLoading() {
         super.onStartLoading();
@@ -34,13 +37,22 @@ public class MessagesLoader extends AsyncTaskLoader<List<Message>>{
         }
     }
 
+    // Faire un processus de chargement long en background
     @Override
     public List<Message> loadInBackground() {
         try {
-            return ApiClient.getInstance().getMessages();
+            return ApiClient.getInstance(getContext()).getMessages(mUserId);
+            // Un loader connait le Context car on lui passe this quand on le crée dans l'Activity.
         } catch (IOException e){
             Log.e("MessagesLoader", "Failed to load messages", e);
             return null;
         }
     }
+
+    @Override
+    public void deliverResult(List<Message> data) {
+        mResult = data;
+        super.deliverResult(data);
+    }
+
 }

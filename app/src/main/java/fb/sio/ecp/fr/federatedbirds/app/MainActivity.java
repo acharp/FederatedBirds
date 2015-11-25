@@ -1,5 +1,6 @@
 package fb.sio.ecp.fr.federatedbirds.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import fb.sio.ecp.fr.federatedbirds.R;
+import fb.sio.ecp.fr.federatedbirds.auth.TokenManager;
 import fb.sio.ecp.fr.federatedbirds.model.Message;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Message>> {
@@ -24,11 +26,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (TokenManager.getUserToken(this) == null) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
+
         setContentView(R.layout.activity_main);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
@@ -56,8 +63,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
     public Loader<List<Message>> onCreateLoader(int id, Bundle args) {
-        return new MessagesLoader(this);
+        return new MessagesLoader(this, null);
     }
 
     @Override
