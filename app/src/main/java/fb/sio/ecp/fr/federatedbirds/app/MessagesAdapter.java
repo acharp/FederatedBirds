@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import fb.sio.ecp.fr.federatedbirds.R;
@@ -42,7 +44,11 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
         // Permet de donner des nouvelles données à une ancienne vue.
 
         Message message = mMessages.get(position);
-        //holder.mUserAvatarView.setImageDrawable();
+
+        Picasso.with(holder.mUserAvatarView.getContext())
+                .load(message.user.avatar)
+                .into(holder.mUserAvatarView);
+
         holder.mTextView.setText(message.text); // binding
 
     }

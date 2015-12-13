@@ -88,12 +88,25 @@ public class ApiClient {
         return get("users" + id, User.class);
     }
 
+    public List<User> getUserFollowed(Long userId) throws IOException {
+        String id = userId != null ? Long.toString(userId) : "me";
+        TypeToken<List<User>> type = new TypeToken<List<User>>() {};
+        return get("users", type.getType());
+        //return get("users/" + id + "/followed", type.getType());
+    }
+
     public String login(String login, String password) throws IOException {
         JsonObject body = new JsonObject();
         body.addProperty("login", login);
         body.addProperty("password", password);
         return post("auth/token", body, String.class);
 
+    }
+
+    public Message postMessage(String text) throws IOException {
+        Message message = new Message();
+        message.text = text;
+        return post("messages", message, Message.class);
     }
 
 }
