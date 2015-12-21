@@ -1,5 +1,7 @@
 package fb.sio.ecp.fr.federatedbirds.app;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -13,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -26,15 +27,9 @@ import fb.sio.ecp.fr.federatedbirds.model.Message;
 public class HomeFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Message>>{
 
     private static final int LOADER_MESSAGES = 0;
+    private static final int REQUEST_POST_MESSAGE = 0;
 
     private MessagesAdapter mMessagesAdapter;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
 
     @Nullable
     @Override
@@ -59,11 +54,23 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Clicked", Toast.LENGTH_SHORT).show();
+                PostMessageFragment postFragment = new PostMessageFragment();
+                postFragment.setTargetFragment(HomeFragment.this, REQUEST_POST_MESSAGE);
+                postFragment.show(getFragmentManager(), "post_dialog");
             }
         });
+    }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_POST_MESSAGE:
+                if (resultCode == Activity.RESULT_OK) {
+                    getLoaderManager().restartLoader(LOADER_MESSAGES, null, this);
+                }
+                return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -71,12 +78,8 @@ public class HomeFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onStart();
         getLoaderManager().initLoader(
                 LOADER_MESSAGES,
-                null, // On peut passer un paramètre (à la place de null) pour filtrer ce que le Loader va charger
+                null,
                 this
-                // C'est pour satisfaire ce dernier param que notre activité implémente LoaderManager.Loader... Sinon il aurait fallu
-                // créer une instance anonyme. Les 2 solutions sont OK.
-                // LoaderCallbacks est une interface avec type générique. Le generics qu'on lui passe est celui qu'on veut
-                // renvoyer donc ici une liste de messages.
         );
     }
 

@@ -21,6 +21,13 @@ public class LoginActivity extends AppCompatActivity {
                 login();
             }
         });
+
+        findViewById(R.id.signup).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signup();
+            }
+        });
     }
 
     private void login(){
@@ -34,12 +41,11 @@ public class LoginActivity extends AppCompatActivity {
         if (!ValidationUtils.validatePassword(password)){
             passwordText.setError(getString(R.string.invalid_format));
             passwordText.requestFocus();
+            return;
         }
 
         if (!ValidationUtils.validateLogin(login)){
             usernameText.setError(getString(R.string.invalid_format));
-            // getString permet d'obtenir un string depuis une ressource
-            // Pour obtenir une ressource de n'importe quel type : getRessources
             usernameText.requestFocus();
             // Replace l'utilisateur sur le champ, pour qu'il réécrive son username correctement
             return;
@@ -50,9 +56,13 @@ public class LoginActivity extends AppCompatActivity {
 
         taskFragment.show(getSupportFragmentManager(), "login_task");
 
+    }
 
-
-
+    private void signup(){
+        SignUpFragment signUpFragment = new SignUpFragment();
+        getSupportFragmentManager().beginTransaction()
+                .add(signUpFragment, "signup_task")
+                .commit();
     }
 
 }

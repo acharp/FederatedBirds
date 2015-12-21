@@ -22,7 +22,6 @@ import fb.sio.ecp.fr.federatedbirds.auth.TokenManager;
  */
 public class LoginTaskFragment extends DialogFragment {
 
-    // Pour éviter les typos entre les différentes classes qui utilises ces arguments
     public static final String ARG_LOGIN = "login";
     public static final String ARG_PASSWORD = "password";
 

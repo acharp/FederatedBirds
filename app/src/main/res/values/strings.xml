@@ -18,4 +18,7 @@
     <string name="empty_message_error">Empty message not posted</string>
     <string name="progress">Processing...</string>
     <string name="post_failed">The post failed.</string>
+    <string name="signup">Sign Up</string>
+    <string name="email">Email Address</string>
+    <string name="registration_failed">User registration failed.</string>
 </resources>

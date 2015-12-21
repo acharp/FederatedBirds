@@ -26,7 +26,7 @@ public class MessagesLoader extends AsyncTaskLoader<List<Message>>{
         mUserId = UserId;
     }
 
-    // Obligé d'appeler forceLoad au démarrage du loader pour que le load fonctionne. Mal fait mais c'est comme ça.
+    // Obligé d'appeler forceLoad au démarrage du loader pour que le load fonctionne.
     @Override
     protected void onStartLoading() {
         super.onStartLoading();
