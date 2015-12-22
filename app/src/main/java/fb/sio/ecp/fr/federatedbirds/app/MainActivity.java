@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,23 +29,42 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (TokenManager.getUserToken(this) == null) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        }
+        checkUserLogin();
 
         setContentView(R.layout.activity_main);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home:
+                        Fragment homeFragment = new HomeFragment();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.main_container, homeFragment)
+                                .commit();
+                        ((DrawerLayout) findViewById(R.id.drawer)).closeDrawer(navigationView);
+                        return true;
+                    case R.id.followed:
+                        RelationshipFragment followedFragment = new RelationshipFragment();
+                        followedFragment.setArguments("followed");
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.main_container, followedFragment)
+                                .commit();
+                        ((DrawerLayout) findViewById(R.id.drawer)).closeDrawer(navigationView);
+                        return true;
+                    case R.id.followers:
+                        RelationshipFragment followersFragment = new RelationshipFragment();
+                        followersFragment.setArguments("followers");
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.main_container, followersFragment)
+                                .commit();
+                        ((DrawerLayout) findViewById(R.id.drawer)).closeDrawer(navigationView);
                         return true;
                     case R.id.settings:
                         Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                         startActivity(intent);
+                        ((DrawerLayout) findViewById(R.id.drawer)).closeDrawer(navigationView);
                         return true;
                 }
                 return false;
@@ -63,7 +83,6 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     public void setSupportActionBar(Toolbar toolbar) {
         super.setSupportActionBar(toolbar);
-        // Le drawer toggle n'est pas un élément visible, c'est juste un helper qui va placer le hamburger dans la toolbar
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,
                 (DrawerLayout) findViewById(R.id.drawer),
@@ -71,7 +90,7 @@ public class MainActivity extends AppCompatActivity  {
                 R.string.open_menu,
                 R.string.close_menu
         );
-        mDrawerToggle.syncState();  // Pas sûr qu'il faille l'appeler ici => A mettre dans un onPostCreate cf code prof
+        mDrawerToggle.syncState();
     }
 
     public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {

@@ -68,7 +68,6 @@ public class ApiClient {
             } finally {
                 writer.close();
             }
-            connection.getOutputStream();
         }
         Reader reader = new InputStreamReader(connection.getInputStream());
         try{
@@ -91,8 +90,13 @@ public class ApiClient {
     public List<User> getUserFollowed(Long userId) throws IOException {
         String id = userId != null ? Long.toString(userId) : "me";
         TypeToken<List<User>> type = new TypeToken<List<User>>() {};
-        return get("users", type.getType());
-        //return get("users/" + id + "/followed", type.getType());
+        return get("users/" + id + "/followed", type.getType());
+    }
+
+    public List<User> getUserFollowers(Long userId) throws IOException {
+        String id = userId != null ? Long.toString(userId) : "me";
+        TypeToken<List<User>> type = new TypeToken<List<User>>() {};
+        return get("users/" + id + "/followers", type.getType());
     }
 
     public String login(String login, String password) throws IOException {
@@ -109,7 +113,7 @@ public class ApiClient {
         return post("messages", message, Message.class);
     }
 
-    public User suscribeUser(String login, String password, String email) throws IOException {
+    public String suscribeUser(String login, String password, String email) throws IOException {
         JsonObject body = new JsonObject();
         body.addProperty("login", login);
         body.addProperty("password", password);

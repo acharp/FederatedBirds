@@ -1,9 +1,7 @@
 package fb.sio.ecp.fr.federatedbirds.app;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,7 +21,6 @@ import java.util.HashMap;
 
 import fb.sio.ecp.fr.federatedbirds.ApiClient;
 import fb.sio.ecp.fr.federatedbirds.R;
-import fb.sio.ecp.fr.federatedbirds.model.User;
 import fb.sio.ecp.fr.federatedbirds.utils.ValidationUtils;
 
 /**
@@ -44,118 +41,65 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
-        mLoginText = (EditText) view.findViewById(R.id.username);
-        mPasswordText = (EditText) view.findViewById(R.id.password);
-        mEmailText = (EditText) view.findViewById(R.id.email);
+        mLoginText = (EditText) view.findViewById(R.id.signup_username);
+        mPasswordText = (EditText) view.findViewById(R.id.signup_password);
+        mEmailText = (EditText) view.findViewById(R.id.signup_email);
 
-        Dialog dialog = new android.support.v7.app.AlertDialog.Builder(getContext())
-                .setTitle(R.string.signup)
-                .setView(view)
-                .setPositiveButton(R.string.signup, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+        view.findViewById(R.id.signup_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                        HashMap<String, String> task_params = new HashMap<>();
+                String login = mLoginText.getText().toString();
+                String password = mPasswordText.getText().toString();
+                String email = mEmailText.getText().toString();
 
-                        String login = mLoginText.getText().toString();
-                        if (!(ValidationUtils.validateLogin(login))){
-                            mLoginText.setError(getString(R.string.invalid_format));
-                            mLoginText.requestFocus();
-                            return;
-                        }
-                        task_params.put("login", login);
+                if (!(ValidationUtils.validateLogin(login))){
+                    mLoginText.setError(getString(R.string.invalid_format));
+                    mLoginText.requestFocus();
+                    return;
+                }
 
-                        String password = mPasswordText.getText().toString();
-                        if (!(ValidationUtils.validatePassword(password))) {
-                            mPasswordText.setError(getString(R.string.invalid_format));
-                            mPasswordText.requestFocus();
-                            return;
-                        }
-                        task_params.put("password", password);
+                if (!(ValidationUtils.validatePassword(password))) {
+                    mPasswordText.setError(getString(R.string.invalid_format));
+                    mPasswordText.requestFocus();
+                    return;
+                }
 
-                        String email = mEmailText.getText().toString();
-                        if (!(ValidationUtils.validateEmail(email))) {
-                            mEmailText.setError(getString(R.string.invalid_format));
-                            mEmailText.requestFocus();
-                            return;
-                        }
-                        task_params.put("email", email);
+                if (!(ValidationUtils.validateEmail(email))) {
+                    mEmailText.setError(getString(R.string.invalid_format));
+                    mEmailText.requestFocus();
+                    return;
+                }
 
-                        SignUpTaskFragment taskFragment = new SignUpTaskFragment();
-                        taskFragment.setArguments(task_params);
-                        taskFragment.setTargetFragment(
-                                getTargetFragment(),
-                                getTargetRequestCode()
-                        );
-                        taskFragment.show(getFragmentManager(), "post_progress");
+                HashMap<String, String> task_params = new HashMap<>();
+                task_params.put("login", login);
+                task_params.put("password", password);
+                task_params.put("email", email);
 
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, null)
-                .create();
-        dialog.show();
+                SignUpTaskFragment taskFragment = new SignUpTaskFragment();
+                taskFragment.setArguments(task_params);
+                taskFragment.setTargetFragment(
+                        getTargetFragment(),
+                        getTargetRequestCode()
+                );
+                taskFragment.show(getFragmentManager(), "post_progress");
+            }
+        });
+
+        view.findViewById(R.id.cancel_action).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeFragment();
+            }
+        });
+
     }
 
-    /*
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-        View v = getLayoutInflater(savedInstanceState).inflate(R.layout.signup_fragment, null);
-        mLoginText = (EditText) v.findViewById(R.id.username);
-        mPasswordText = (EditText) v.findViewById(R.id.password);
-        mEmailText = (EditText) v.findViewById(R.id.email);
-
-        Dialog dialog = new android.support.v7.app.AlertDialog.Builder(getContext())
-                .setTitle(R.string.signup)
-                .setView(v)
-                .setPositiveButton(R.string.signup, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        HashMap<String, String> task_params = new HashMap<>();
-
-                        String login = mLoginText.getText().toString();
-                        if (!(ValidationUtils.validateLogin(login))){
-                            mLoginText.setError(getString(R.string.invalid_format));
-                            mLoginText.requestFocus();
-                            return;
-                        }
-                        task_params.put("login", login);
-
-                        String password = mPasswordText.getText().toString();
-                        if (!(ValidationUtils.validatePassword(password))) {
-                            mPasswordText.setError(getString(R.string.invalid_format));
-                            mPasswordText.requestFocus();
-                            return;
-                        }
-                        task_params.put("password", password);
-
-                        String email = mEmailText.getText().toString();
-                        if (!(ValidationUtils.validateEmail(email))) {
-                            mEmailText.setError(getString(R.string.invalid_format));
-                            mEmailText.requestFocus();
-                            return;
-                        }
-                        task_params.put("email", email);
-
-                        SignUpTaskFragment taskFragment = new SignUpTaskFragment();
-                        taskFragment.setArguments(task_params);
-                        taskFragment.setTargetFragment(
-                                getTargetFragment(),
-                                getTargetRequestCode()
-                        );
-                        taskFragment.show(getFragmentManager(), "post_progress");
-
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, null)
-                .create();
-        return dialog;
+    private void closeFragment() {
+        getFragmentManager().beginTransaction().remove(this).commit();
     }
-    */
 
-    public static class SignUpTaskFragment extends DialogFragment {
+        public static class SignUpTaskFragment extends DialogFragment {
 
         private static final String ARG_LOGIN = "login";
         private static final String ARG_PASSWORD = "password";
@@ -187,10 +131,10 @@ public class SignUpFragment extends Fragment {
             return dialog;
         }
 
-        private class SignUpTask extends AsyncTask<Void, Void, User> {
+        private class SignUpTask extends AsyncTask<Void, Void, String> {
 
             @Override
-            protected User doInBackground(Void... params) {
+            protected String doInBackground(Void... params) {
                 try {
                     String login = getArguments().getString("login");
                     String password = getArguments().getString("password");
@@ -203,13 +147,9 @@ public class SignUpFragment extends Fragment {
             }
 
             @Override
-            protected void onPostExecute(User user) {
+            protected void onPostExecute(String user) {
                 if (user != null) {
-                    getTargetFragment().onActivityResult(
-                            getTargetRequestCode(),
-                            Activity.RESULT_OK,
-                            null
-                    );
+                    Toast.makeText(getContext(), R.string.registration_success, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), R.string.registration_failed, Toast.LENGTH_SHORT).show();
                 }

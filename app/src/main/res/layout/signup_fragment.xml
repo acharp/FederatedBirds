@@ -5,23 +5,37 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/signup_username"
         android:hint="@string/username"
         android:layout_width="150dp"
         android:layout_height="wrap_content" />
 
     <EditText
-        android:id="@+id/email"
+        android:id="@+id/signup_email"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
         android:layout_width="150dp"
         android:layout_height="wrap_content" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/signup_password"
         android:hint="@string/password"
         android:inputType="textPassword"
         android:layout_width="150dp"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/signup_button"
+        style="?attr/buttonBarPositiveButtonStyle"
+        android:text="@string/signup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/cancel_action"
+        style="?attr/buttonBarNegativeButtonStyle"
+        android:text="@string/cancel"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
 </LinearLayout>

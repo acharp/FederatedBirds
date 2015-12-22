@@ -21,11 +21,17 @@ import fb.sio.ecp.fr.federatedbirds.model.User;
 /**
  * Created by charpi on 13/12/15.
  */
-public class UserFollowedFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<User>> {
+public class RelationshipFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<User>> {
 
     private static final int LOADER_USERS = 0;
 
     private UsersAdapter mUsersAdapter;
+
+    public void setArguments(String relation) {
+        Bundle params = new Bundle();
+        params.putString("relation", relation);
+        setArguments(params);
+    }
 
     @Nullable
     @Override
@@ -45,6 +51,7 @@ public class UserFollowedFragment extends Fragment implements LoaderManager.Load
         mUsersAdapter = new UsersAdapter();
         listView.setAdapter(mUsersAdapter);
 
+
     }
 
     @Override
@@ -59,7 +66,7 @@ public class UserFollowedFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public Loader<List<User>> onCreateLoader(int id, Bundle args) {
-        return new FollowedLoader(getContext(), null);
+        return new RelationshipLoader(getContext(), null, getArguments().getString("relation"));
     }
 
     @Override

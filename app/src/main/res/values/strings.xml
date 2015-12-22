@@ -12,7 +12,7 @@
     <string name="close_menu">Close the menu</string>
     <string name="logout">Disconnection</string>
     <string name="login_progress">Connecting...</string>
-    <string name="followed">Subscriptions</string>
+    <string name="followed">Followed</string>
     <string name="new_message">New message</string>
     <string name="post">Post</string>
     <string name="empty_message_error">Empty message not posted</string>
@@ -21,4 +21,9 @@
     <string name="signup">Sign Up</string>
     <string name="email">Email Address</string>
     <string name="registration_failed">User registration failed.</string>
+    <string name="cancel">Cancel</string>
+    <string name="registration_success">User registrated successfully</string>
+    <string name="followers">Followers</string>
+    <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
 </resources>

@@ -16,8 +16,6 @@ import fb.sio.ecp.fr.federatedbirds.model.Message;
 
 /**
  * Created by charpi on 24/11/15.
- *
- * Permet à un RecyclerView d'avoir une liste de message.
  */
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MessageViewHolder> {
 

@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,17 +47,36 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MessageViewH
                 .into(holder.mAvatarView);
 
         holder.mUsernameView.setText(user.login);
+
+        holder.mButtonFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: implement following
+            }
+        });
+
+        holder.mButtonUnfollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: implement unfollowing
+            }
+        });
+
     }
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView mAvatarView;
         private TextView mUsernameView;
+        private Button mButtonFollow;
+        private Button mButtonUnfollow;
 
         public MessageViewHolder(View itemView) {
             super(itemView);
             mAvatarView = (ImageView) itemView.findViewById(R.id.avatar);
             mUsernameView = (TextView) itemView.findViewById(R.id.username);
+            mButtonFollow = (Button) itemView.findViewById(R.id.follow);
+            mButtonUnfollow = (Button) itemView.findViewById(R.id.unfollow);
         }
 
     }

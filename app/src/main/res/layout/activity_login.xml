@@ -9,6 +9,7 @@
     tools:context="fr.sio.ecp.federatedbirds.app.LoginActivity">
 
     <LinearLayout
+        android:id="@+id/container"
         android:layout_margin="56dp"
         android:orientation="vertical"
         android:layout_width="match_parent"

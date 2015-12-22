@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     private void signup(){
         SignUpFragment signUpFragment = new SignUpFragment();
         getSupportFragmentManager().beginTransaction()
-                .add(signUpFragment, "signup_task")
+                .add(R.id.container, signUpFragment)
                 .commit();
     }
 
