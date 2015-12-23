@@ -42,8 +42,6 @@ public class ApiClient {
         mContext = context.getApplicationContext();
         // On ne stocke pas directement le context (au cas où on nous passerait par exemple une activité) mais l'ApplicationContext
     }
-    // On rend ce constructeur privé pour compléter le pattern singleton et obliger les utilisateurs à utiliser getInstance
-    // au lieu qu'ils apellent new ApiClient() qui briserait notre singleton...
 
     private <T> T get(String path, Type type) throws IOException{
         return method("GET", path, null, type);
@@ -121,4 +119,17 @@ public class ApiClient {
         return post("users", body, String.class);
     }
 
+    public User getAuthUser() throws IOException {
+        return get("users/me", User.class);
+    }
+
+    public User setFollowing(Long following_id, boolean follow) throws IOException {
+        JsonObject body = new JsonObject();
+        if (follow) {
+            body.addProperty("followed", "true");
+        } else {
+            body.addProperty("followed", "false");
+        }
+        return post("users/" + following_id.toString(), body, User.class);
+    }
 }

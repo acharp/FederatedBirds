@@ -26,4 +26,6 @@
     <string name="followers">Followers</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
+    <string name="following_success">You are now following this user</string>
+    <string name="unfollowing_success">You dont follow this user anymore</string>
 </resources>

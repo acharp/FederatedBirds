@@ -50,8 +50,6 @@ public class RelationshipFragment extends Fragment implements LoaderManager.Load
         listView.setLayoutManager(new LinearLayoutManager(getContext()));
         mUsersAdapter = new UsersAdapter();
         listView.setAdapter(mUsersAdapter);
-
-
     }
 
     @Override
@@ -76,5 +74,6 @@ public class RelationshipFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoaderReset(Loader<List<User>> loader) { }
+
 
 }

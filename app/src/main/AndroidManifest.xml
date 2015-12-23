@@ -26,6 +26,8 @@
 
         <activity android:name=".app.SettingsActivity"/>
 
+        <activity android:name=".app.DetailUserActivity"/>
+
     </application>
 
 </manifest>

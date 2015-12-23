@@ -1,5 +1,6 @@
 package fb.sio.ecp.fr.federatedbirds.app;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,20 +40,27 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.Messag
 
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
-        // Permet de donner des nouvelles données à une ancienne vue.
-
         Message message = mMessages.get(position);
+        final long user_id = message.user.id;
 
         Picasso.with(holder.mUserAvatarView.getContext())
                 .load(message.user.avatar)
                 .into(holder.mUserAvatarView);
 
-        holder.mTextView.setText(message.text); // binding
+        holder.mTextView.setText(message.text);
+
+        holder.mUserAvatarView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), DetailUserActivity.class);
+                intent.putExtra("userid", user_id);
+                v.getContext().startActivity(intent);
+            }
+        });
 
     }
 
-    // Cette classe pour garder les références des views. On les récupère une fois dans onCreateViewHolder puis on garde les références.
-    // Ca nous évite de faire un findViewById à chaque fois. Améliore considérablement la fluidité. Nécessaire pour scrolling.
+
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView mUserAvatarView;

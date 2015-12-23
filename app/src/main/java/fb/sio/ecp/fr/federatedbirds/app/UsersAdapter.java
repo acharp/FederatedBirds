@@ -1,17 +1,25 @@
 package fb.sio.ecp.fr.federatedbirds.app;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.support.v4.os.AsyncTaskCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.List;
 
+import fb.sio.ecp.fr.federatedbirds.ApiClient;
 import fb.sio.ecp.fr.federatedbirds.R;
 import fb.sio.ecp.fr.federatedbirds.model.User;
 
@@ -41,6 +49,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MessageViewH
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         User user = mUsers.get(position);
+        final long user_id = user.id;
 
         Picasso.with(holder.mAvatarView.getContext())
                 .load(user.avatar)
@@ -51,17 +60,31 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MessageViewH
         holder.mButtonFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: implement following
+                AsyncTaskCompat.executeParallel(
+                        new SetFollowingTask(v.getContext(), user_id, true)
+                );
+                Toast.makeText(v.getContext(), R.string.following_success, Toast.LENGTH_SHORT).show();
             }
         });
 
         holder.mButtonUnfollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: implement unfollowing
+                AsyncTaskCompat.executeParallel(
+                        new SetFollowingTask(v.getContext(), user_id, false)
+                );
+                Toast.makeText(v.getContext(), R.string.unfollowing_success, Toast.LENGTH_SHORT).show();
             }
         });
 
+        holder.mAvatarView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(),DetailUserActivity.class);
+                intent.putExtra("userid", user_id);
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
@@ -78,7 +101,30 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MessageViewH
             mButtonFollow = (Button) itemView.findViewById(R.id.follow);
             mButtonUnfollow = (Button) itemView.findViewById(R.id.unfollow);
         }
+    }
 
+
+    private class SetFollowingTask extends AsyncTask<Void, Void, User> {
+
+        private Context mContext;
+        private long mFollowingId;
+        private boolean mFollow;
+
+        public SetFollowingTask(Context context, long following_id, boolean follow){
+            mContext = context;
+            mFollowingId = following_id;
+            mFollow = follow;
+        }
+
+        @Override
+        protected User doInBackground(Void... params) {
+            try {
+                return ApiClient.getInstance(mContext).setFollowing(mFollowingId, mFollow);
+            } catch (IOException e) {
+                Log.e(UsersAdapter.class.getSimpleName(), "Set following failed", e);
+                return null;
+            }
+        }
     }
 
 }
