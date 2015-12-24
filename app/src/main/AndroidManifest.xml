@@ -26,7 +26,8 @@
 
         <activity android:name=".app.SettingsActivity"/>
 
-        <activity android:name=".app.DetailUserActivity"/>
+        <activity android:name=".app.DetailUserActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>
 

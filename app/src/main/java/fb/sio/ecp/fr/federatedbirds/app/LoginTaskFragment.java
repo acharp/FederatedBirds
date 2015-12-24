@@ -71,7 +71,8 @@ public class LoginTaskFragment extends DialogFragment {
         @Override
         protected void onPostExecute(String token) {
             if (token != null){
-                TokenManager.setUserToken(getContext(), token);
+                String login = getArguments().getString("login");
+                TokenManager.setUserToken(getContext(), token, login);
                 getActivity().finish(); // Pour terminer l'activité de login quand on a fini.
                 // Pour que Précédent réagisse correctement : revienne à l'écran d'accueil du tel au lieu de revenir à l'écran de login.
                 startActivity(MainActivity.newIntent(getContext()));

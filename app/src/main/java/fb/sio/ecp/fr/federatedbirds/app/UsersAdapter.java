@@ -3,6 +3,7 @@ package fb.sio.ecp.fr.federatedbirds.app;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.os.AsyncTaskCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,6 +29,10 @@ import fb.sio.ecp.fr.federatedbirds.model.User;
  */
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MessageViewHolder> {
 
+    private static final String USERID_KEY = "user_id";
+    private static final String USERNAME_KEY = "user_name";
+    private static final String USERAVATAR_KEY = "user_avatar";
+
     private List<User> mUsers;
 
     public void setUsers(List<User> users) {
@@ -49,7 +54,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MessageViewH
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         User user = mUsers.get(position);
+
         final long user_id = user.id;
+        final String username = user.login;
+        final String user_avatar = user.avatar;
 
         Picasso.with(holder.mAvatarView.getContext())
                 .load(user.avatar)
@@ -81,7 +89,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MessageViewH
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(),DetailUserActivity.class);
-                intent.putExtra("userid", user_id);
+                Bundle bundle = new Bundle();
+                bundle.putLong(USERID_KEY, user_id);
+                bundle.putCharSequence(USERNAME_KEY, username);
+                bundle.putString(USERAVATAR_KEY, user_avatar);
+                intent.putExtras(bundle);
                 v.getContext().startActivity(intent);
             }
         });
