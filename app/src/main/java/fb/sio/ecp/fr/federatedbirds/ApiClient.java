@@ -6,6 +6,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -25,7 +28,8 @@ import fb.sio.ecp.fr.federatedbirds.model.User;
  */
 public class ApiClient {
 
-    private static final String API_BASE="http://10.0.2.2:8080/";
+    //private static final String API_BASE="http://10.0.2.2:8080/";
+    private static final String API_BASE="https://jablog-1158.appspot.com/";
 
     private static ApiClient mInstance;
 
@@ -102,7 +106,6 @@ public class ApiClient {
         body.addProperty("login", login);
         body.addProperty("password", password);
         return post("auth/token", body, String.class);
-
     }
 
     public Message postMessage(String text) throws IOException {
@@ -131,5 +134,80 @@ public class ApiClient {
             body.addProperty("followed", "false");
         }
         return post("users/" + following_id.toString(), body, User.class);
+    }
+
+    public String uploadAvatar(String imgString) throws IOException {
+        HttpURLConnection connection = null;
+        DataOutputStream outputStream = null;
+        String pathToOurFile = imgString;
+        String urlServer = "https://jablog-1158.appspot.com/users/me/avatar";
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary =  "*****";
+
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1*1024*1024;
+
+        FileInputStream fileInputStream = new FileInputStream(new File(pathToOurFile) );
+
+        URL url = new URL(urlServer);
+        connection = (HttpURLConnection) url.openConnection();
+
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+        connection.setUseCaches(false);
+
+        connection.setRequestMethod("POST");
+        String token = TokenManager.getUserToken(mContext);
+        if (token != null) {
+            connection.addRequestProperty("Authorization", "Bearer " + token);
+        }
+
+        connection.setRequestProperty("Connection", "Keep-Alive");
+        connection.setRequestProperty("ENCTYPE", "multipart/form-data");
+        connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+
+        outputStream = new DataOutputStream( connection.getOutputStream() );
+        outputStream.writeBytes(twoHyphens + boundary + lineEnd);
+        outputStream.writeBytes("Content-Disposition: form-data; name=\"uploadedfile\";filename=\"" + pathToOurFile +"\"" + lineEnd);
+        outputStream.writeBytes(lineEnd);
+
+        bytesAvailable = fileInputStream.available();
+        bufferSize = Math.min(bytesAvailable, maxBufferSize);
+        buffer = new byte[bufferSize];
+
+        // Read file
+        bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+        while (bytesRead > 0)
+        {
+            outputStream.write(buffer, 0, bufferSize);
+            bytesAvailable = fileInputStream.available();
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+        }
+
+        outputStream.writeBytes(lineEnd);
+        outputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+        int serverResponseCode = connection.getResponseCode();
+        String serverResponseMessage = connection.getResponseMessage();
+
+        fileInputStream.close();
+        outputStream.flush();
+        outputStream.close();
+
+        return serverResponseMessage;
+
+        /*
+        Reader reader = new InputStreamReader(connection.getInputStream());
+        try{
+            return new Gson().fromJson(reader, String.class);
+        } finally {
+            reader.close();
+        }
+        */
+
     }
 }

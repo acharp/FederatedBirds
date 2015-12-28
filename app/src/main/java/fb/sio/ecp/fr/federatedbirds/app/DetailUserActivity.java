@@ -1,5 +1,6 @@
 package fb.sio.ecp.fr.federatedbirds.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -55,8 +56,7 @@ public class DetailUserActivity extends AppCompatActivity implements LoaderManag
             public void onClick(View v) {
                 String auth_username = TokenManager.getUserLogin(v.getContext());
                 if (auth_username.equals(getIntent().getExtras().getCharSequence(USERNAME_KEY))) {
-                    Toast.makeText(v.getContext(),"OK OK", Toast.LENGTH_SHORT).show();
-                    //TODO: Launch activity or fragment to upload profile picture from gallery
+                    launchUploadAvatar();
                 }
                 else {
                     Toast.makeText(v.getContext(), R.string.auth_restriction, Toast.LENGTH_SHORT).show();
@@ -90,5 +90,10 @@ public class DetailUserActivity extends AppCompatActivity implements LoaderManag
     @Override
     public void onLoaderReset(Loader<List<Message>> loader) {
 
+    }
+
+    private void launchUploadAvatar(){
+        startActivity(new Intent(this, UploadAvatarActivity.class));
+        finish();
     }
 }

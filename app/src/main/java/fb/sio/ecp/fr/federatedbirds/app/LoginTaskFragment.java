@@ -50,11 +50,8 @@ public class LoginTaskFragment extends DialogFragment {
         return dialog;
     }
 
-    // Ici on va chercher l'user sur le serveur/l'API donc appel réseau donc il faut faire de l'asynchrone
-    // D'où l'héritage de AsyncTask.
+
     private  class LoginTask extends AsyncTask<Void, Void, String> {
-        // Void représente un type dont la seule valeur possible est null.
-        // Pratique quand on doit fournir une valeur générics mais qu'on en veut pas/qu'on ne veut pas l'utiliser. Comme ici Progress.
 
         @Override
         protected String doInBackground(Void... params) {

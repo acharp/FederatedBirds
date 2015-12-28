@@ -29,4 +29,9 @@
     <string name="following_success">You are now following this user</string>
     <string name="unfollowing_success">You dont follow this user anymore</string>
     <string name="auth_restriction">You dont have authorization for this action</string>
+    <string name="browse_gallery">Browse gallery</string>
+    <string name="upload_picture">Upload picture</string>
+    <string name="select_file">First select a file from gallery</string>
+    <string name="file_uploaded">Successfully uploaded new avatar</string>
+    <string name="upload_failed">Something went wrong while uploading file</string>
 </resources>

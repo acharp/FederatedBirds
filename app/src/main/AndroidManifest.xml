@@ -3,6 +3,7 @@
     package="fb.sio.ecp.fr.federatedbirds">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -28,6 +29,8 @@
 
         <activity android:name=".app.DetailUserActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".app.UploadAvatarActivity"/>
 
     </application>
 
