@@ -12,6 +12,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.os.AsyncTaskCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -33,7 +34,7 @@ public class PostMessageFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        View v = getLayoutInflater(savedInstanceState).inflate(R.layout.post_message, null);
+        View v = LayoutInflater.from(getContext()).inflate(R.layout.post_message, null);
         mMessageText = (EditText) v.findViewById(R.id.message);
 
         Dialog dialog = new android.support.v7.app.AlertDialog.Builder(getContext())
@@ -44,7 +45,7 @@ public class PostMessageFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
 
                         String message = mMessageText.getText().toString();
-                        if (!TextUtils.isEmpty(message)) {
+                        if (TextUtils.isEmpty(message)) {
                             Toast.makeText(getContext(), R.string.empty_message_error, Toast.LENGTH_LONG).show();
                             return;
                         }
